@@ -1,35 +1,50 @@
-@import './base.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import './reset.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+:root {
+  --background: oklch(0.99 0 0);
+  --background-muted: oklch(0.955 0 0);
+
+  --surface: oklch(100% 0 0);
+
+  --foreground: oklch(24.794% 0.00585 271.18);
+  --foreground-muted: oklch(52.59% 0.02753 262.01);
+  --accent: oklch(55.411% 0.18886 33.83);
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+.app {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 3rem;
+  padding: 0.75rem 1.125rem;
+  border-radius: 999rem;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  line-height: 1.25;
+  cursor: pointer;
+  box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 12%);
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+.button:hover {
+  filter: brightness(0.95);
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+.button--secondary {
+  background: var(--background-muted);
+  color: var(--foreground);
+  box-shadow: none;
+}
+
+.button__icon {
+  font-size: 1.25rem;
+  line-height: 1;
 }
