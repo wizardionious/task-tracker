@@ -1,20 +1,32 @@
 <script setup lang="ts">
+import { useTasksStore } from '@/stores/tasks'
 import AppLink from './AppLink.vue'
+import { computed } from 'vue'
 
-const links = [
-  { to: '/', label: 'All tasks' },
-  { to: '/completed', label: 'Completed' },
-]
+const tasksStore = useTasksStore()
+
+const myTasksCount = computed(
+  () => tasksStore.tasks.filter((task) => !task.completed).length,
+)
+const completedTasksCount = computed(
+  () => tasksStore.tasks.filter((task) => task.completed).length,
+)
 </script>
 
 <template>
   <aside class="sidebar">
     <nav class="sidebar__nav" aria-label="Task navigation">
       <ul class="sidebar__nav-list">
-        <li v-for="link in links" :key="link.to" class="sidebar__nav-item">
-          <AppLink :to="link.to">
-            {{ link.label }}
-            <span class="sidebar__count">0</span>
+        <li class="sidebar__nav-item">
+          <AppLink to="/">
+            My tasks
+            <span class="sidebar__tasks-count">{{ myTasksCount }}</span>
+          </AppLink>
+        </li>
+        <li class="sidebar__nav-item">
+          <AppLink to="/completed">
+            Completed
+            <span class="sidebar__tasks-count">{{ completedTasksCount }} </span>
           </AppLink>
         </li>
       </ul>
@@ -40,6 +52,10 @@ const links = [
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
+  }
+
+  &__tasks-count {
+    font-size: 0.875rem;
   }
 
   &__author {
