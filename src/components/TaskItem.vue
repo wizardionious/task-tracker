@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import { useTaskEdit } from '@/composables/useTaskEdit'
 import type { Task, TaskId } from '@/types'
-import { nextTick, ref } from 'vue'
+import { useTemplateRef } from 'vue'
 
-const props = defineProps<{
+const { task, editable } = defineProps<{
   task: Task
   editable: boolean
 }>()
@@ -14,63 +15,24 @@ const emit = defineEmits<{
   restore: [id: TaskId]
 }>()
 
-const isEditing = ref(false)
-const draftText = ref('')
-const errorMessage = ref('')
+const inputElement = useTemplateRef<HTMLInputElement>('inputElement')
+const editButton = useTemplateRef<HTMLButtonElement>('editButton')
 
-const inputElement = ref<HTMLInputElement | null>(null)
-const editButton = ref<HTMLButtonElement | null>(null)
+const {
+  isEditing,
+  draftText,
+  errorMessage,
+  hasError,
+  startEditing,
+  cancelEditing,
+  saveEditing,
+} = useTaskEdit(() => task.text, {
+  input: inputElement,
+  editButton,
+  onRename: (newText) => emit('rename', task.id, newText),
+})
 
-async function startEditing() {
-  if (!props.editable) {
-    return
-  }
-
-  draftText.value = props.task.text
-  errorMessage.value = ''
-  isEditing.value = true
-
-  await nextTick()
-
-  inputElement.value?.focus()
-  inputElement.value?.select()
-}
-
-async function saveEditing(restoreFocus = false) {
-  if (!isEditing.value) {
-    return
-  }
-
-  const text = draftText.value.trim()
-
-  if (!text) {
-    errorMessage.value = 'Task name cannot be empty.'
-    return
-  }
-
-  isEditing.value = false
-  errorMessage.value = ''
-
-  if (text !== props.task.text) {
-    emit('rename', props.task.id, text)
-  }
-
-  if (restoreFocus) {
-    await nextTick()
-    editButton.value?.focus()
-  }
-}
-
-async function cancelEditing() {
-  isEditing.value = false
-  errorMessage.value = ''
-
-  await nextTick()
-
-  editButton.value?.focus()
-}
-
-const checkboxId = `task-${props.task.id}-completed`
+const checkboxId = `task-${task.id}-completed`
 </script>
 
 <template>
@@ -93,11 +55,10 @@ const checkboxId = `task-${props.task.id}-completed`
           class="task__input"
           type="text"
           aria-label="Task name"
-          :aria-invalid="Boolean(errorMessage)"
+          :aria-invalid="hasError"
           :aria-describedby="
-            errorMessage ? `task-edit-error-${task.id}` : undefined
+            hasError ? `task-edit-error-${task.id}` : undefined
           "
-          @input="errorMessage = ''"
           @keydown.enter.prevent="saveEditing(true)"
           @keydown.esc.stop.prevent="cancelEditing"
           @blur="saveEditing()"
@@ -124,7 +85,7 @@ const checkboxId = `task-${props.task.id}-completed`
       class="button button--icon"
       type="button"
       :aria-label="`Edit task: ${task.text}`"
-      @click="startEditing"
+      @click="startEditing()"
     >
       <span class="fa6-solid--pen-clip" aria-hidden="true"></span>
     </button>
