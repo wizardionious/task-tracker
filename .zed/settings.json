@@ -1,0 +1,12 @@
+{
+  "languages": {
+    "TypeScript": {
+      "language_servers": [
+        "vtsls",
+        "!typescript-ls",
+        "!typescript-language-server",
+        "..."
+      ]
+    }
+  }
+}
