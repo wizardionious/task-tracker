@@ -4,13 +4,18 @@ import HomePage from '../pages/HomePage.vue'
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: HomePage,
   },
   {
     path: '/completed',
     name: 'Completed',
     component: () => import('../pages/CompletedPage.vue'),
+  },
+  {
+    path: '/trash',
+    name: 'Trash',
+    component: () => import('../pages/TrashPage.vue'),
   },
 ] as const
 

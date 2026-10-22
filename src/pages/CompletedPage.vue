@@ -6,7 +6,7 @@ import { computed } from 'vue'
 
 const tasksStore = useTasksStore()
 const completedTasks = computed(() =>
-  tasksStore.tasks.filter((task) => task.completed),
+  tasksStore.tasks.filter((task) => task.completed && task.deletedAt === null),
 )
 </script>
 
@@ -22,7 +22,7 @@ const completedTasks = computed(() =>
     <TasksList
       :tasks="completedTasks"
       @toggle-completed="tasksStore.toggleTaskCompleted"
-      @remove-task="tasksStore.removeTask"
+      @remove-task="tasksStore.moveTaskToTrash"
     >
       <template #empty>
         <TasksEmptyState description="Completed tasks will appear here." />

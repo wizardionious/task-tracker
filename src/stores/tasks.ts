@@ -6,7 +6,12 @@ export const useTasksStore = defineStore('tasks', () => {
   const tasks = ref<Task[]>([])
 
   function addTask(text: string) {
-    tasks.value.push({ id: crypto.randomUUID(), completed: false, text })
+    tasks.value.push({
+      id: crypto.randomUUID(),
+      completed: false,
+      text,
+      deletedAt: null,
+    })
   }
 
   function toggleTaskCompleted(id: Task['id']) {
@@ -17,8 +22,15 @@ export const useTasksStore = defineStore('tasks', () => {
     }
   }
 
-  function removeTask(id: Task['id']) {
+  function deleteTaskPermanently(id: Task['id']) {
     tasks.value = tasks.value.filter((task) => task.id !== id)
+  }
+
+  function moveTaskToTrash(id: Task['id']) {
+    const taskToTrash = tasks.value.find((task) => task.id === id)
+    if (!taskToTrash) return
+
+    taskToTrash.deletedAt = Date.now()
   }
 
   function renameTask(id: Task['id'], newText: string) {
@@ -39,7 +51,8 @@ export const useTasksStore = defineStore('tasks', () => {
     tasks,
     addTask,
     toggleTaskCompleted,
-    removeTask,
+    deleteTaskPermanently,
+    moveTaskToTrash,
     renameTask,
   }
 })

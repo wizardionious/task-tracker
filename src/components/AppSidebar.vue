@@ -6,10 +6,13 @@ import { computed } from 'vue'
 const tasksStore = useTasksStore()
 
 const myTasksCount = computed(
-  () => tasksStore.tasks.filter((task) => !task.completed).length,
+  () => tasksStore.tasks.filter((task) => !task.completed && task.deletedAt === null).length,
 )
 const completedTasksCount = computed(
-  () => tasksStore.tasks.filter((task) => task.completed).length,
+  () => tasksStore.tasks.filter((task) => task.completed && task.deletedAt === null).length,
+)
+const deletedTasksCount = computed(
+  () => tasksStore.tasks.filter((task) => task.deletedAt !== null).length,
 )
 </script>
 
@@ -27,6 +30,12 @@ const completedTasksCount = computed(
           <AppLink to="/completed">
             Completed
             <span class="sidebar__tasks-count">{{ completedTasksCount }} </span>
+          </AppLink>
+        </li>
+        <li class="sidebar__nav-item">
+          <AppLink to="/trash">
+            Deleted
+            <span class="sidebar__tasks-count">{{ deletedTasksCount }} </span>
           </AppLink>
         </li>
       </ul>

@@ -6,7 +6,7 @@ import { computed } from 'vue'
 
 const tasksStore = useTasksStore()
 const remainingTasks = computed(() =>
-  tasksStore.tasks.filter((task) => !task.completed),
+  tasksStore.tasks.filter((task) => !task.completed && task.deletedAt === null),
 )
 </script>
 
@@ -22,7 +22,7 @@ const remainingTasks = computed(() =>
     <TasksList
       :tasks="remainingTasks"
       @toggle-completed="tasksStore.toggleTaskCompleted"
-      @remove-task="tasksStore.removeTask"
+      @remove-task="tasksStore.moveTaskToTrash"
       @rename-task="tasksStore.renameTask"
       editable
     >
