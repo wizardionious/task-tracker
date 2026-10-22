@@ -2,23 +2,20 @@
 import TasksEmptyState from '@/components/TasksEmptyState.vue'
 import TasksList from '@/components/TasksList.vue'
 import { useTasksStore } from '@/stores/tasks'
-import { computed } from 'vue'
 
 const tasksStore = useTasksStore()
-const deletedTasks = computed(() =>
-  tasksStore.tasks.filter((task) => task.deletedAt !== null),
-)
+
 </script>
 
 <template>
   <main class="page__main">
     <header class="page-header">
       <h1 class="page-header__title">Deleted tasks</h1>
-      <p class="page-header__text">{{ deletedTasks.length }} tasks deleted</p>
+      <p class="page-header__text">{{ tasksStore.deletedTasks.length }} tasks deleted</p>
     </header>
 
     <TasksList
-      :tasks="deletedTasks"
+      :tasks="tasksStore.deletedTasks"
       @toggle-completed="tasksStore.toggleTaskCompleted"
       @remove-task="tasksStore.deleteTaskPermanently"
     >

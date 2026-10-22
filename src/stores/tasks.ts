@@ -1,9 +1,25 @@
 import type { Task } from '@/types'
 import { acceptHMRUpdate, defineStore } from 'pinia'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 export const useTasksStore = defineStore('tasks', () => {
   const tasks = ref<Task[]>([])
+
+  const deletedTasks = computed(() =>
+    tasks.value.filter((task) => task.deletedAt !== null),
+  )
+
+  const activeTasks = computed(() =>
+    tasks.value.filter((task) => task.deletedAt === null),
+  )
+
+  const remainingTasks = computed(() =>
+    activeTasks.value.filter((task) => !task.completed),
+  )
+
+  const completedTasks = computed(() =>
+    activeTasks.value.filter((task) => task.completed),
+  )
 
   function addTask(text: string) {
     tasks.value.push({
@@ -49,6 +65,9 @@ export const useTasksStore = defineStore('tasks', () => {
 
   return {
     tasks,
+    remainingTasks,
+    completedTasks,
+    deletedTasks,
     addTask,
     toggleTaskCompleted,
     deleteTaskPermanently,

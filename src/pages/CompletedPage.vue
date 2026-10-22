@@ -2,12 +2,9 @@
 import TasksEmptyState from '@/components/TasksEmptyState.vue'
 import TasksList from '@/components/TasksList.vue'
 import { useTasksStore } from '@/stores/tasks'
-import { computed } from 'vue'
 
 const tasksStore = useTasksStore()
-const completedTasks = computed(() =>
-  tasksStore.tasks.filter((task) => task.completed && task.deletedAt === null),
-)
+
 </script>
 
 <template>
@@ -15,12 +12,12 @@ const completedTasks = computed(() =>
     <header class="page-header">
       <h1 class="page-header__title">Completed tasks</h1>
       <p class="page-header__text">
-        {{ completedTasks.length }} tasks completed
+        {{ tasksStore.completedTasks.length }} tasks completed
       </p>
     </header>
 
     <TasksList
-      :tasks="completedTasks"
+      :tasks="tasksStore.completedTasks"
       @toggle-completed="tasksStore.toggleTaskCompleted"
       @remove-task="tasksStore.moveTaskToTrash"
     >

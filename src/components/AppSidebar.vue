@@ -1,19 +1,11 @@
 <script setup lang="ts">
 import { useTasksStore } from '@/stores/tasks'
 import AppLink from './AppLink.vue'
-import { computed } from 'vue'
+import { storeToRefs } from 'pinia'
 
 const tasksStore = useTasksStore()
 
-const myTasksCount = computed(
-  () => tasksStore.tasks.filter((task) => !task.completed && task.deletedAt === null).length,
-)
-const completedTasksCount = computed(
-  () => tasksStore.tasks.filter((task) => task.completed && task.deletedAt === null).length,
-)
-const deletedTasksCount = computed(
-  () => tasksStore.tasks.filter((task) => task.deletedAt !== null).length,
-)
+const { remainingTasks, completedTasks, deletedTasks } = storeToRefs(tasksStore)
 </script>
 
 <template>
@@ -23,19 +15,23 @@ const deletedTasksCount = computed(
         <li class="sidebar__nav-item">
           <AppLink to="/">
             My tasks
-            <span class="sidebar__tasks-count">{{ myTasksCount }}</span>
+            <span class="sidebar__tasks-count">
+              {{ remainingTasks.length }}
+            </span>
           </AppLink>
         </li>
         <li class="sidebar__nav-item">
           <AppLink to="/completed">
             Completed
-            <span class="sidebar__tasks-count">{{ completedTasksCount }} </span>
+            <span class="sidebar__tasks-count">
+              {{ completedTasks.length }}
+            </span>
           </AppLink>
         </li>
         <li class="sidebar__nav-item">
           <AppLink to="/trash">
-            Deleted
-            <span class="sidebar__tasks-count">{{ deletedTasksCount }} </span>
+            Trash
+            <span class="sidebar__tasks-count">{{ deletedTasks.length }}</span>
           </AppLink>
         </li>
       </ul>
