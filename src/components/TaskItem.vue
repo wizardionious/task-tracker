@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Task } from '@/types'
+import type { Task, TaskId } from '@/types'
 import { nextTick, ref } from 'vue'
 
 const props = defineProps<{
@@ -8,9 +8,10 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'toggle-completed': [id: Task['id']]
-  'remove-task': [id: Task['id']]
-  'rename-task': [id: Task['id'], text: string]
+  'toggle-completed': [id: TaskId]
+  remove: [id: TaskId]
+  rename: [id: TaskId, text: string]
+  restore: [id: TaskId]
 }>()
 
 const isEditing = ref(false)
@@ -51,7 +52,7 @@ async function saveEditing(restoreFocus = false) {
   errorMessage.value = ''
 
   if (text !== props.task.text) {
-    emit('rename-task', props.task.id, text)
+    emit('rename', props.task.id, text)
   }
 
   if (restoreFocus) {
@@ -126,10 +127,20 @@ async function cancelEditing() {
     </div>
 
     <button
-      class="button task__delete-button"
+      v-if="task.deletedAt !== null"
+      class="button button--icon task__restore-button"
       type="button"
-      :aria-label="'Delete task: ' + task.text"
-      @click="emit('remove-task', task.id)"
+      :aria-label="`Restore task: ${task.text}`"
+      @click="emit('restore', task.id)"
+    >
+      <span class="fa-solid--trash-restore" aria-hidden="true"></span>
+    </button>
+
+    <button
+      class="button button--icon task__delete-button"
+      type="button"
+      :aria-label="`${task.deletedAt === null ? 'Move task to trash' : 'Delete task'}: ${task.text}`"
+      @click="emit('remove', task.id)"
     >
       <span class="fa6-solid--trash" aria-hidden="true"></span>
     </button>
@@ -207,14 +218,11 @@ async function cancelEditing() {
   }
 
   &__delete-button {
-    flex-shrink: 0;
-    background-color: transparent;
-    border-radius: 0.75rem;
     color: var(--danger);
+  }
 
-    &:hover {
-      background-color: var(--background);
-    }
+  &__restore-button {
+    color: var(--success);
   }
 
   &--completed &__text {

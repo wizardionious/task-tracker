@@ -8,6 +8,7 @@
   font-weight: 600;
   line-height: 1.25;
   cursor: pointer;
+  flex-shrink: 0;
 
   &--primary {
     background: var(--accent);
@@ -30,6 +31,15 @@
 
     &:hover {
       filter: brightness(0.95);
+    }
+  }
+
+  &--icon {
+    background-color: transparent;
+    border-radius: 0.75rem;
+
+    &:hover {
+      background-color: var(--background);
     }
   }
 

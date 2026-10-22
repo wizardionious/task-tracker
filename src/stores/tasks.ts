@@ -1,4 +1,4 @@
-import type { Task } from '@/types'
+import type { Task, TaskId } from '@/types'
 import { acceptHMRUpdate, defineStore } from 'pinia'
 import { computed, ref } from 'vue'
 
@@ -30,7 +30,7 @@ export const useTasksStore = defineStore('tasks', () => {
     })
   }
 
-  function toggleTaskCompleted(id: Task['id']) {
+  function toggleTaskCompleted(id: TaskId) {
     const task = tasks.value.find((task) => task.id === id)
 
     if (task && task.deletedAt === null) {
@@ -38,18 +38,25 @@ export const useTasksStore = defineStore('tasks', () => {
     }
   }
 
-  function deleteTaskPermanently(id: Task['id']) {
+  function deleteTaskPermanently(id: TaskId) {
     tasks.value = tasks.value.filter((task) => task.id !== id)
   }
 
-  function moveTaskToTrash(id: Task['id']) {
+  function moveTaskToTrash(id: TaskId) {
     const taskToTrash = tasks.value.find((task) => task.id === id)
     if (!taskToTrash) return
 
     taskToTrash.deletedAt = Date.now()
   }
 
-  function renameTask(id: Task['id'], newText: string) {
+  function restoreTask(id: TaskId) {
+    const taskToRestore = tasks.value.find((task) => task.id === id)
+    if (!taskToRestore) return
+
+    taskToRestore.deletedAt = null
+  }
+
+  function renameTask(id: TaskId, newText: string) {
     const text = newText.trim()
 
     if (!text) {
@@ -58,7 +65,7 @@ export const useTasksStore = defineStore('tasks', () => {
 
     const task = tasks.value.find((task) => task.id === id)
 
-    if (task) {
+    if (task && task.deletedAt === null) {
       task.text = text
     }
   }
@@ -72,6 +79,7 @@ export const useTasksStore = defineStore('tasks', () => {
     toggleTaskCompleted,
     deleteTaskPermanently,
     moveTaskToTrash,
+    restoreTask,
     renameTask,
   }
 })

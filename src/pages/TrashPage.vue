@@ -18,6 +18,7 @@ const tasksStore = useTasksStore()
     <TasksList
       :tasks="tasksStore.deletedTasks"
       @remove-task="tasksStore.deleteTaskPermanently"
+      @restore-task="tasksStore.restoreTask"
     >
       <template #empty>
         <TasksEmptyState description="Deleted tasks will appear here." />

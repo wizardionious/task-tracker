@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Task } from '@/types'
+import type { Task, TaskId } from '@/types'
 import TaskItem from './TaskItem.vue'
 
 const { editable = false } = defineProps<{
@@ -8,12 +8,13 @@ const { editable = false } = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'toggle-completed': [id: Task['id']]
-  'remove-task': [id: Task['id']]
-  'rename-task': [id: Task['id'], text: string]
+  'toggle-completed': [id: TaskId]
+  'remove-task': [id: TaskId]
+  'rename-task': [id: TaskId, text: string]
+  'restore-task': [id: TaskId]
 }>()
 
-function forwardRename(id: Task['id'], text: string) {
+function forwardRename(id: TaskId, text: string) {
   emit('rename-task', id, text)
 }
 </script>
@@ -33,8 +34,9 @@ function forwardRename(id: Task['id'], text: string) {
         :task="task"
         :editable="editable"
         @toggle-completed="emit('toggle-completed', $event)"
-        @remove-task="emit('remove-task', $event)"
-        @rename-task="forwardRename"
+        @remove="emit('remove-task', $event)"
+        @rename="forwardRename"
+        @restore="emit('restore-task', $event)"
       />
     </TransitionGroup>
 
