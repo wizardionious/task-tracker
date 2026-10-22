@@ -33,7 +33,7 @@ export const useTasksStore = defineStore('tasks', () => {
   function toggleTaskCompleted(id: Task['id']) {
     const task = tasks.value.find((task) => task.id === id)
 
-    if (task) {
+    if (task && task.deletedAt === null) {
       task.completed = !task.completed
     }
   }

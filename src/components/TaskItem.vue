@@ -76,6 +76,7 @@ async function cancelEditing() {
       class="task__checkbox"
       type="checkbox"
       :checked="task.completed"
+      :disabled="task.deletedAt !== null"
       :aria-label="'Completed: ' + task.text"
       @change="emit('toggle-completed', task.id)"
     />
@@ -146,6 +147,10 @@ async function cancelEditing() {
     height: 1.125rem;
     flex-shrink: 0;
     accent-color: var(--accent);
+
+    &:disabled {
+      cursor: not-allowed;
+    }
   }
 
   &__content {
