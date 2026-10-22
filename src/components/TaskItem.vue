@@ -69,11 +69,14 @@ async function cancelEditing() {
 
   editButton.value?.focus()
 }
+
+const checkboxId = `task-${props.task.id}-completed`
 </script>
 
 <template>
   <li class="card task" :class="{ 'task--completed': task.completed }">
     <input
+      :id="checkboxId"
       class="task__checkbox"
       type="checkbox"
       :checked="task.completed"
@@ -110,21 +113,21 @@ async function cancelEditing() {
         </p>
       </template>
 
-      <button
-        v-else-if="editable"
-        ref="editButton"
-        class="task__text task__edit-button"
-        type="button"
-        :aria-label="'Edit task: ' + task.text"
-        @dblclick="startEditing"
-      >
+      <label v-else :for="checkboxId" class="task__text">
         {{ task.text }}
-      </button>
-
-      <span v-else class="task__text">
-        {{ task.text }}
-      </span>
+      </label>
     </div>
+
+    <button
+      v-if="editable && !isEditing"
+      ref="editButton"
+      class="button button--icon"
+      type="button"
+      :aria-label="`Edit task: ${task.text}`"
+      @click="startEditing"
+    >
+      <span class="fa6-solid--pen-clip" aria-hidden="true"></span>
+    </button>
 
     <button
       v-if="task.deletedAt !== null"
@@ -172,23 +175,6 @@ async function cancelEditing() {
   &__text {
     display: block;
     overflow-wrap: anywhere;
-  }
-
-  &__edit-button {
-    width: 100%;
-    padding: 0;
-    border: 0;
-    background: transparent;
-    color: inherit;
-    font: inherit;
-    text-align: left;
-    cursor: text;
-
-    &:focus-visible {
-      outline: 0.125rem solid var(--accent);
-      outline-offset: 0.25rem;
-      border-radius: 0.25rem;
-    }
   }
 
   &__input {
