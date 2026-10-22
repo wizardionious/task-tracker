@@ -1,94 +1,55 @@
 <script setup lang="ts">
 import type { Task } from '@/types'
+import TaskItem from './TaskItem.vue'
 
-defineProps<{ tasks: Task[] }>()
+const { editable = false } = defineProps<{
+  tasks: Task[]
+  editable?: boolean
+}>()
 
-defineEmits<{
+const emit = defineEmits<{
   'toggle-completed': [id: Task['id']]
   'remove-task': [id: Task['id']]
+  'rename-task': [id: Task['id'], text: string]
 }>()
+
+function forwardRename(id: Task['id'], text: string) {
+  emit('rename-task', id, text)
+}
 </script>
 
 <template>
-  <ul class="tasks-list">
-    <li
+  <TransitionGroup name="tasks-list" tag="ul" class="tasks-list">
+    <TaskItem
       v-for="task in tasks"
       :key="task.id"
-      class="card tasks-list__item task"
-      :class="{ 'task--completed': task.completed }"
-    >
-      <label class="task__label">
-        <input
-          class="task__checkbox"
-          type="checkbox"
-          :checked="task.completed"
-          @change="$emit('toggle-completed', task.id)"
-        />
-
-        <span class="task__text">
-          {{ task.text }}
-        </span>
-      </label>
-      <button
-        class="button task__delete-button"
-        type="button"
-        :aria-label="'Delete task: ' + task.text"
-        @click="$emit('remove-task', task.id)"
-      >
-        <span class="fa6-solid--trash"></span>
-      </button>
-    </li>
-  </ul>
+      class="tasks-list__item"
+      :task="task"
+      :editable="editable"
+      @toggle-completed="emit('toggle-completed', $event)"
+      @remove-task="emit('remove-task', $event)"
+      @rename-task="forwardRename"
+    />
+  </TransitionGroup>
 </template>
 
 <style lang="scss" scoped>
+.tasks-list-enter-active,
+.tasks-list-leave-active {
+  transition: all 0.3s ease;
+}
+
+.tasks-list-enter-from,
+.tasks-list-leave-to {
+  opacity: 0;
+  transform: translateX(1.875rem);
+}
+
 .tasks-list {
   margin: 1.5rem 0;
 
   &__item:not(:last-child) {
     margin-bottom: 1rem;
-  }
-}
-
-.task {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-
-  &__label {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    cursor: pointer;
-  }
-
-  &__checkbox {
-    width: 1.125rem;
-    height: 1.125rem;
-    flex-shrink: 0;
-    accent-color: var(--accent);
-  }
-
-  &__text {
-    overflow-wrap: anywhere;
-    user-select: none;
-  }
-
-  &__delete-button {
-    background-color: transparent;
-    border-radius: 0.75rem;
-    color: var(--danger);
-
-    &:hover {
-      background-color: var(--background);
-    }
-  }
-
-  &--completed &__text {
-    text-decoration: line-through;
-    color: var(--foreground-muted);
   }
 }
 </style>

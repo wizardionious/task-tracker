@@ -1,5 +1,5 @@
 import type { Task } from '@/types'
-import { defineStore } from 'pinia'
+import { acceptHMRUpdate, defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useTasksStore = defineStore('tasks', () => {
@@ -21,5 +21,30 @@ export const useTasksStore = defineStore('tasks', () => {
     tasks.value = tasks.value.filter((task) => task.id !== id)
   }
 
-  return { tasks, addTask, toggleTaskCompleted, removeTask }
+  function renameTask(id: Task['id'], newText: string) {
+    const text = newText.trim()
+
+    if (!text) {
+      return
+    }
+
+    const task = tasks.value.find((task) => task.id === id)
+
+    if (task) {
+      task.text = text
+    }
+  }
+
+  return {
+    tasks,
+    addTask,
+    toggleTaskCompleted,
+    removeTask,
+    renameTask,
+  }
 })
+
+// Keep existing tasks when store actions change during development.
+if (import.meta.hot) {
+  import.meta.hot.accept(acceptHMRUpdate(useTasksStore, import.meta.hot))
+}

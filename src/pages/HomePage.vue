@@ -24,6 +24,8 @@ const remainingTasks = computed(() =>
       :tasks="remainingTasks"
       @toggle-completed="tasksStore.toggleTaskCompleted"
       @remove-task="tasksStore.removeTask"
+      @rename-task="tasksStore.renameTask"
+      editable
     />
 
     <TasksEmptyState v-else description="Add a task to plan your day." />
