@@ -10,8 +10,8 @@ const routes = [
   {
     path: '/completed',
     name: 'Completed',
-    component: () => import('../pages/CompletedPage.vue')
-  }
+    component: () => import('../pages/CompletedPage.vue'),
+  },
 ] as const
 
 const router = createRouter({
