@@ -20,13 +20,14 @@ const completedTasks = computed(() =>
     </header>
 
     <TasksList
-      v-if="completedTasks.length"
       :tasks="completedTasks"
       @toggle-completed="tasksStore.toggleTaskCompleted"
       @remove-task="tasksStore.removeTask"
-    />
-
-    <TasksEmptyState v-else description="Completed tasks will appear here." />
+    >
+      <template #empty>
+        <TasksEmptyState description="Completed tasks will appear here." />
+      </template>
+    </TasksList>
   </main>
 </template>
 

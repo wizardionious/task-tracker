@@ -20,15 +20,16 @@ const remainingTasks = computed(() =>
     </header>
 
     <TasksList
-      v-if="remainingTasks.length"
       :tasks="remainingTasks"
       @toggle-completed="tasksStore.toggleTaskCompleted"
       @remove-task="tasksStore.removeTask"
       @rename-task="tasksStore.renameTask"
       editable
-    />
-
-    <TasksEmptyState v-else description="Add a task to plan your day." />
+    >
+      <template #empty>
+        <TasksEmptyState description="Add a task to plan your day." />
+      </template>
+    </TasksList>
 
     <button
       type="button"

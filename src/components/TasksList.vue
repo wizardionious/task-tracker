@@ -19,18 +19,29 @@ function forwardRename(id: Task['id'], text: string) {
 </script>
 
 <template>
-  <TransitionGroup name="tasks-list" tag="ul" class="tasks-list">
-    <TaskItem
-      v-for="task in tasks"
-      :key="task.id"
-      class="tasks-list__item"
-      :task="task"
-      :editable="editable"
-      @toggle-completed="emit('toggle-completed', $event)"
-      @remove-task="emit('remove-task', $event)"
-      @rename-task="forwardRename"
-    />
-  </TransitionGroup>
+  <Transition name="tasks-list" mode="out-in">
+    <TransitionGroup
+      v-if="tasks.length"
+      name="tasks-list"
+      tag="ul"
+      class="tasks-list"
+    >
+      <TaskItem
+        v-for="task in tasks"
+        :key="task.id"
+        class="tasks-list__item"
+        :task="task"
+        :editable="editable"
+        @toggle-completed="emit('toggle-completed', $event)"
+        @remove-task="emit('remove-task', $event)"
+        @rename-task="forwardRename"
+      />
+    </TransitionGroup>
+
+    <div v-else>
+      <slot name="empty" />
+    </div>
+  </Transition>
 </template>
 
 <style lang="scss" scoped>
