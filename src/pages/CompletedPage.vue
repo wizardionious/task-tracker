@@ -15,7 +15,7 @@ const completedTasks = computed(() =>
     <header class="page-header">
       <h1 class="page-header__title">Completed tasks</h1>
       <p class="page-header__text">
-        {{ completedTasks.length }} tasks remaining
+        {{ completedTasks.length }} tasks completed
       </p>
     </header>
 
