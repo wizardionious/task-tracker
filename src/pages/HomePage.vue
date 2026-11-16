@@ -10,7 +10,7 @@ const tasksStore = useTasksStore()
 const newTaskId = ref<TaskId | null>(null)
 
 function addTask() {
-  newTaskId.value = tasksStore.addTask('testTask')
+  newTaskId.value = tasksStore.addTask('New task')
 }
 </script>
 
