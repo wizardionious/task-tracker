@@ -47,4 +47,10 @@ const tasksStore = useTasksStore()
     font-size: 1rem;
   }
 }
+
+@media (max-width: 40rem) {
+  .page__main {
+    padding: 2rem 1rem;
+  }
+}
 </style>

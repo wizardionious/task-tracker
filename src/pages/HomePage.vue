@@ -73,4 +73,17 @@ function addTask() {
     font-size: 1rem;
   }
 }
+
+@media (max-width: 40rem) {
+  .page {
+    &__main {
+      padding: 2rem 1rem 6rem;
+    }
+
+    &__add-button {
+      right: 1rem;
+      bottom: calc(var(--mobile-nav-height) + 1rem);
+    }
+  }
+}
 </style>

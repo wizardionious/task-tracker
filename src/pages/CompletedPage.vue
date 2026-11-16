@@ -4,7 +4,6 @@ import TasksList from '@/components/TasksList.vue'
 import { useTasksStore } from '@/stores/tasks'
 
 const tasksStore = useTasksStore()
-
 </script>
 
 <template>
@@ -46,6 +45,12 @@ const tasksStore = useTasksStore()
     margin: 0.25rem 0 0;
     color: var(--foreground-muted);
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  .page__main {
+    padding: 2rem 1rem;
   }
 }
 </style>

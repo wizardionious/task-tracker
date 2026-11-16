@@ -17,4 +17,15 @@ import AppSidebar from '@/components/AppSidebar.vue'
   display: flex;
   min-height: 100vh;
 }
+
+@media (max-width: 40rem) {
+  .layout {
+    --mobile-nav-height: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+
+    flex-direction: column;
+    min-height: 100dvh;
+    padding-bottom: var(--mobile-nav-height);
+    overflow-x: clip;
+  }
+}
 </style>

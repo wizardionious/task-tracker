@@ -13,7 +13,7 @@ const { remainingTasks, completedTasks, deletedTasks } = storeToRefs(tasksStore)
     <nav class="sidebar__nav" aria-label="Task navigation">
       <ul class="sidebar__nav-list">
         <li class="sidebar__nav-item">
-          <AppLink to="/">
+          <AppLink to="/" class="sidebar__nav-link">
             My tasks
             <span class="sidebar__tasks-count">
               {{ remainingTasks.length }}
@@ -21,7 +21,7 @@ const { remainingTasks, completedTasks, deletedTasks } = storeToRefs(tasksStore)
           </AppLink>
         </li>
         <li class="sidebar__nav-item">
-          <AppLink to="/completed">
+          <AppLink to="/completed" class="sidebar__nav-link">
             Completed
             <span class="sidebar__tasks-count">
               {{ completedTasks.length }}
@@ -29,7 +29,7 @@ const { remainingTasks, completedTasks, deletedTasks } = storeToRefs(tasksStore)
           </AppLink>
         </li>
         <li class="sidebar__nav-item">
-          <AppLink to="/trash">
+          <AppLink to="/trash" class="sidebar__nav-link">
             Trash
             <span class="sidebar__tasks-count">{{ deletedTasks.length }}</span>
           </AppLink>
@@ -76,11 +76,42 @@ const { remainingTasks, completedTasks, deletedTasks } = storeToRefs(tasksStore)
 
 @media (max-width: 40rem) {
   .sidebar {
-    flex-basis: auto;
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 10;
+    width: 100%;
+    height: var(--mobile-nav-height);
+    padding: 0.5rem max(0.5rem, env(safe-area-inset-right, 0px))
+      calc(0.5rem + env(safe-area-inset-bottom, 0px))
+      max(0.5rem, env(safe-area-inset-left, 0px));
+    border-top: 0.0625rem solid oklch(from var(--foreground) l c h / 0.1);
+
+    &__nav {
+      height: 100%;
+    }
 
     &__nav-list {
-      flex-direction: row;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      height: 100%;
+    }
+
+    :deep(.sidebar__nav-link) {
+      height: 100%;
+      min-height: 2.75rem;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0;
+      padding: 0.25rem;
+      font-size: 0.875rem;
+    }
+
+    &__tasks-count {
+      font-size: 0.75rem;
+    }
+
+    &__author {
+      display: none;
     }
   }
 }
