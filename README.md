@@ -2,6 +2,8 @@
 
 Version 1.0.0 — a learning project for managing a personal task list, built with Vue 3 and TypeScript.
 
+See the [release notes](CHANGELOG.md) for features and known limitations.
+
 ## Features
 
 - Create tasks with **Add task**. Each new task starts as **New task**, with its
