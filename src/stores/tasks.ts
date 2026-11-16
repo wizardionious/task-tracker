@@ -21,13 +21,17 @@ export const useTasksStore = defineStore('tasks', () => {
     activeTasks.value.filter((task) => task.completed),
   )
 
-  function addTask(text: string) {
+  function addTask(text: string): TaskId {
+    const id = crypto.randomUUID()
+
     tasks.value.push({
-      id: crypto.randomUUID(),
+      id,
       completed: false,
       text,
       deletedAt: null,
     })
+
+    return id
   }
 
   function toggleTaskCompleted(id: TaskId) {

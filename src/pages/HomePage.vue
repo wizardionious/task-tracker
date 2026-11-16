@@ -2,9 +2,16 @@
 import TasksEmptyState from '@/components/TasksEmptyState.vue'
 import TasksList from '@/components/TasksList.vue'
 import { useTasksStore } from '@/stores/tasks'
+import type { TaskId } from '@/types'
+import { ref } from 'vue'
 
 const tasksStore = useTasksStore()
 
+const newTaskId = ref<TaskId | null>(null)
+
+function addTask() {
+  newTaskId.value = tasksStore.addTask('testTask')
+}
 </script>
 
 <template>
@@ -21,6 +28,7 @@ const tasksStore = useTasksStore()
       @toggle-completed="tasksStore.toggleTaskCompleted"
       @remove-task="tasksStore.moveTaskToTrash"
       @rename-task="tasksStore.renameTask"
+      :editing-task-id="newTaskId"
       editable
     >
       <template #empty>
@@ -31,7 +39,7 @@ const tasksStore = useTasksStore()
     <button
       type="button"
       class="button button--primary page__add-button"
-      @click="tasksStore.addTask('testTask')"
+      @click="addTask"
     >
       <span class="button__icon" aria-hidden="true">+</span>
       Add task

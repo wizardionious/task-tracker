@@ -2,9 +2,11 @@
 import type { Task, TaskId } from '@/types'
 import TaskItem from './TaskItem.vue'
 
-const { editable = false } = defineProps<{
+const { editable = false, editingTaskId = null } = defineProps<{
   tasks: Task[]
   editable?: boolean
+  // Task that should open in edit mode when it mounts (e.g. a just-added one).
+  editingTaskId?: TaskId | null
 }>()
 
 const emit = defineEmits<{
@@ -33,6 +35,7 @@ function forwardRename(id: TaskId, text: string) {
         class="tasks-list__item"
         :task="task"
         :editable="editable"
+        :start-editing="editable && task.id === editingTaskId"
         @toggle-completed="emit('toggle-completed', $event)"
         @remove="emit('remove-task', $event)"
         @rename="forwardRename"

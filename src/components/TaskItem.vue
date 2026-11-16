@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { useTaskEdit } from '@/composables/useTaskEdit'
 import type { Task, TaskId } from '@/types'
-import { useTemplateRef } from 'vue'
+import { onMounted, useTemplateRef } from 'vue'
 
-const { task, editable } = defineProps<{
-  task: Task
-  editable: boolean
-}>()
+const { task, editable, startEditing: startEditingOnMount = false } =
+  defineProps<{
+    task: Task
+    editable: boolean
+    startEditing?: boolean
+  }>()
 
 const emit = defineEmits<{
   'toggle-completed': [id: TaskId]
@@ -30,6 +32,12 @@ const {
   input: inputElement,
   editButton,
   onRename: (newText) => emit('rename', task.id, newText),
+})
+
+onMounted(() => {
+  if (startEditingOnMount) {
+    startEditing()
+  }
 })
 
 const checkboxId = `task-${task.id}-completed`
