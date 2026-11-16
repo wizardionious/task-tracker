@@ -17,11 +17,11 @@ See the [release notes](CHANGELOG.md) for features and known limitations.
 
 ## Pages
 
-| Path         | Page      | Tasks                              |
-| ------------ | --------- | ---------------------------------- |
-| `/`          | My tasks  | Active, incomplete tasks           |
-| `/completed` | Completed | Completed tasks                    |
-| `/trash`     | Trash     | Deleted tasks that can be restored |
+| Path           | Page      | Tasks                              |
+| -------------- | --------- | ---------------------------------- |
+| `/#/`          | My tasks  | Active, incomplete tasks           |
+| `/#/completed` | Completed | Completed tasks                    |
+| `/#/trash`     | Trash     | Deleted tasks that can be restored |
 
 Restoring a task returns it to **My tasks** or **Completed**, depending on its
 completion status. Permanent deletion is available in **Trash**.
@@ -48,7 +48,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open the address printed by Vite, usually `http://localhost:5173`.
+Open the address printed by Vite, usually `http://localhost:5173/task-tracker/`.
 
 ## Commands
 
@@ -65,7 +65,15 @@ An automated test suite is not configured yet.
 
 ## Deployment
 
-Run `pnpm build` and serve the contents of `dist/` using a static hosting service.
-Routing uses the History API, so configure the server to return `index.html`
-for application routes, including `/completed` and `/trash`, to support direct
-navigation and page reloads.
+The app is configured for GitHub Pages at
+[wizardionious.github.io/task-tracker/](https://wizardionious.github.io/task-tracker/).
+
+In the repository's **Settings → Pages**, select **GitHub Actions** as the source.
+The workflow in `.github/workflows/deploy-pages.yml` builds and deploys the app
+on pushes to `main`. It can also be started manually from the **Actions** tab.
+
+Vite uses `/task-tracker/` as the base path. Vue Router uses hash routing, so
+direct links such as `/task-tracker/#/completed` work without a server-side
+fallback. For another hosting path, update `base` in `vite.config.ts`.
+
+To preview a production build locally, run `pnpm build`, then `pnpm preview`.
