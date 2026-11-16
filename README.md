@@ -1,48 +1,69 @@
-# task-tracker
+# Task Tracker
 
-This template should help get you started developing with Vue 3 in Vite.
+Version 1.0.0 — a learning project for managing a personal task list, built with Vue 3 and TypeScript.
 
-## Recommended IDE Setup
+## Features
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+- Create tasks with **Add task**. Each new task starts as **New task**, with its
+  name selected and ready to edit.
+- Rename tasks: **Enter** or leaving the input saves changes; **Escape** cancels
+  editing. Leading and trailing whitespace is removed, and empty names are rejected.
+- Mark tasks as complete using the checkbox or task name.
+- Move tasks to Trash, restore them, or delete them permanently.
+- View task counts in the navigation and empty states for each list.
+- Use bottom navigation on screens up to 640 px wide.
 
-## Recommended Browser Setup
+## Pages
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+| Path         | Page      | Tasks                              |
+| ------------ | --------- | ---------------------------------- |
+| `/`          | My tasks  | Active, incomplete tasks           |
+| `/completed` | Completed | Completed tasks                    |
+| `/trash`     | Trash     | Deleted tasks that can be restored |
 
-## Type Support for `.vue` Imports in TS
+Restoring a task returns it to **My tasks** or **Completed**, depending on its
+completion status. Permanent deletion is available in **Trash**.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## Data storage
 
-## Customize configuration
+In v1.0.0, tasks are held in memory through Pinia. Navigating between pages keeps
+the current list, but reloading the page or closing the tab resets all tasks,
+including Trash.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+Persistent storage, synchronization, and user accounts are not implemented yet.
 
-## Project Setup
+## Tech stack
+
+Vue 3 with the Composition API and `<script setup>`, TypeScript, Pinia,
+Vue Router, SCSS, and Vite. Code checks use vue-tsc, ESLint, Oxlint, and Prettier.
+
+## Getting started
+
+Requires Node.js `^22.18.0 || >=24.12.0` and pnpm.
 
 ```sh
-pnpm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
+pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-### Type-Check, Compile and Minify for Production
+Open the address printed by Vite, usually `http://localhost:5173`.
 
-```sh
-pnpm build
-```
+## Commands
 
-### Lint with [ESLint](https://eslint.org/)
+| Command           | Purpose                                    |
+| ----------------- | ------------------------------------------ |
+| `pnpm dev`        | Start the development server               |
+| `pnpm type-check` | Check TypeScript and Vue types             |
+| `pnpm build`      | Check types and build into `dist/`         |
+| `pnpm preview`    | Preview the production build locally       |
+| `pnpm lint`       | Run ESLint and Oxlint with automatic fixes |
+| `pnpm format`     | Format files in `src/` with Prettier       |
 
-```sh
-pnpm lint
-```
+An automated test suite is not configured yet.
+
+## Deployment
+
+Run `pnpm build` and serve the contents of `dist/` using a static hosting service.
+Routing uses the History API, so configure the server to return `index.html`
+for application routes, including `/completed` and `/trash`, to support direct
+navigation and page reloads.
