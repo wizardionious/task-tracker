@@ -3,12 +3,15 @@ import { useTaskEdit } from '@/composables/useTaskEdit'
 import type { Task, TaskId } from '@/types'
 import { onMounted, useTemplateRef } from 'vue'
 
-const { task, editable, startEditing: startEditingOnMount = false } =
-  defineProps<{
-    task: Task
-    editable: boolean
-    startEditing?: boolean
-  }>()
+const {
+  task,
+  editable,
+  startEditing: startEditingOnMount = false,
+} = defineProps<{
+  task: Task
+  editable: boolean
+  startEditing?: boolean
+}>()
 
 const emit = defineEmits<{
   'toggle-completed': [id: TaskId]
